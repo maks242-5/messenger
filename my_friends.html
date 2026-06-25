@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мої друзі</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --accent-color: #2563eb;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; overflow: hidden; }
+        .app-container { display: flex; width: 100%; height: 100%; }
+        
+        .sidebar { width: 320px; background-color: var(--panel-bg); border-right: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; padding: 20px 0; }
+        .user-profile { padding: 0 24px 20px 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 15px; display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 45px; height: 45px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: #fff; text-transform: uppercase; }
+        .user-info h1 { font-size: 16px; font-weight: 600; }
+        .user-info p { font-size: 13px; color: #10b981; margin-top: 2px; }
+        
+        nav { display: flex; flex-direction: column; gap: 4px; padding: 0 8px; flex-grow: 1; }
+        nav a { display: flex; align-items: center; padding: 12px 16px; color: var(--text-color); text-decoration: none; border-radius: 10px; font-size: 15px; font-weight: 500; transition: background 0.2s; }
+        nav a:hover { background-color: rgba(255, 255, 255, 0.05); }
+        nav a.active { background-color: rgba(37, 99, 235, 0.2); color: #60a5fa; }
+        nav a:last-child { margin-top: auto; color: #ef4444; }
+        nav a:last-child:hover { background-color: rgba(239, 68, 68, 0.1); }
+
+        .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+        .content-container { width: 100%; max-width: 600px; }
+        .page-title { font-size: 24px; font-weight: 600; margin-bottom: 24px; text-align: center; }
+        
+        .friends-list { display: flex; flex-direction: column; gap: 12px; }
+        .friend-card { display: flex; align-items: center; justify-content: space-between; background: var(--panel-bg); padding: 16px 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .friend-meta { display: flex; align-items: center; gap: 14px; }
+        .friend-avatar { width: 40px; height: 40px; background: #475569; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; text-transform: uppercase; color: #fff; }
+        .friend-name { font-size: 16px; font-weight: 500; }
+        
+        .btn-message { background-color: var(--accent-color); color: white; text-decoration: none; padding: 10px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+        .btn-message:hover { background-color: #3b82f6; }
+        .empty-state { text-align: center; color: var(--text-muted); margin-top: 40px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="avatar">М</div>
+                <div class="user-info">
+                    <h1>макс</h1>
+                    <p>онлайн</p>
+                </div>
+            </div>
+            <nav>
+                <a href="/search_friends">🔍 Пошук друзів</a>
+                <a href="/my_friends" class="active">👥 Мої друзі</a>
+                <a href="/friend_requests">📩 Запити на дружбу</a>
+                <a href="/new_messages">💬 Нові повідомлення</a>
+                <a href="/logout">🚪 Вихід</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="content-container">
+                <h2 class="page-title">Мої друзі</h2>
+                <div class="friends-list">
+                    {% for name in data %}
+                        <div class="friend-card">
+                            <div class="friend-meta">
+                                <div class="friend-avatar">{{ name[0] if name else 'F' }}</div>
+                                <div class="friend-name">{{ name }}</div>
+                            </div>
+                            <a href="/create_message/{{ name }}" class="btn-message">Написати</a>
+                        </div>
+                    {% else %}
+                        <p class="empty-state">У вас поки немає друзів. 🔍</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

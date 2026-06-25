@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вхід в акаунт</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;          /* Глибокий темний фон */
+            --panel-bg: #1e293b;          /* Фон картки */
+            --accent-color: #2563eb;      /* Синій колір кнопки */
+            --accent-hover: #3b82f6;      /* Кнопка при наведенні */
+            --text-color: #f8fafc;        /* Білий текст */
+            --text-muted: #94a3b8;        /* Сірий текст */
+            --danger-color: #ef4444;      /* Червоний для помилок */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 30px;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background-color: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-color);
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .register-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--accent-hover);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Стиль помилок, якщо ввели неправильний пароль/нікнейм */
+        .alert {
+            padding: 12px 16px;
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger-color);
+            color: #fca5a5;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% set category, message = messages[0] %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endif %}
+        {% endwith %}
+
+        <h2>Вхід в акаунт</h2>
+        
+        <form action="/login" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="form-group">
+                <input type="text" name="nickname" placeholder="Нікнейм" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Пароль" required>
+            </div>
+            <button type="submit">Увійти</button>
+        </form>
+
+        <a href="/register" class="register-link">Створити новий акаунт</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Чат з {{ friend.nickname }}</title>
+    <style>
+        .chat-container { width: 50%; margin: 0 auto; border: 1px solid #ccc; padding: 20px; border-radius: 5px; }
+        .messages-box { height: 400px; overflow-y: scroll; border: 1px solid #eee; padding: 10px; margin-bottom: 20px; background: #f9f9f9; }
+        .message { margin-bottom: 15px; padding: 10px; border-radius: 8px; max-width: 70%; }
+        .sent { background-color: #dcf8c6; margin-left: auto; text-align: right; }
+        .received { background-color: #fff; margin-right: auto; text-align: left; border: 1px solid #ddd; }
+        .meta { font-size: 0.8em; color: #555; font-weight: bold; }
+        .input-box { display: flex; }
+        .input-box textarea { flex: 1; height: 50px; resize: none; }
+        .input-box button { width: 100px; margin-left: 10px; }
+        .flash { color: red; }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <h2>Чат з користувачем: {{ friend.nickname }}</h2>
+    <a href="{{ url_for('my_friends') }}">Повернутися до друзів</a>
+    <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <p class="flash {{ category }}">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="messages-box">
+        {% if messages %}
+            {% for msg in messages %}
+                {% if msg.sender == current_user.id %}
+                    <div class="message sent">
+                        <div class="meta">Ви</div>
+                        <div>{{ msg.message_text }}</div>
+                    </div>
+                {% else %}
+                    <div class="message received">
+                        <div class="meta">{{ friend.nickname }}</div>
+                        <div>{{ msg.message_text }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p style="text-align: center; color: gray;">У вас ще немає повідомлень. Напишіть щось першим!</p>
+        {% endif %}
+    </div>
+
+    <form method="POST" class="input-box">
+        <textarea name="text" placeholder="Введіть повідомлення..." required></textarea>
+        <button type="submit">Надіслати</button>
+    </form>
+</div>
+
+<script>
+    var bounds = document.querySelector('.messages-box');
+    bounds.scrollTop = bounds.scrollHeight;
+</script>
+
+</body>
+</html>

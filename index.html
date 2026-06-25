@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        /* Базові налаштування у стилі Telegram (Темна/Нічна тема) */
+        :root {
+            --bg-color: #0f172a;          /* Глибокий темний фон */
+            --panel-bg: #1e293b;          /* Фон для бічної панелі */
+            --accent-color: #2563eb;      /* Класичний синій Telegram */
+            --accent-hover: #3b82f6;      /* Колір при наведенні */
+            --text-color: #f8fafc;        /* Основний білий текст */
+            --text-muted: #94a3b8;        /* Другорядний сірий текст */
+            --logout-color: #ef4444;      /* Червоний для виходу */
+            --logout-hover: #f87171;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Контейнер додатка, що імітує інтерфейс месенджера */
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Бічна панель (Навігація) */
+        .sidebar {
+            width: 320px;
+            background-color: var(--panel-bg);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        /* Профіль користувача вгорі панелі */
+        .user-profile {
+            padding: 0 24px 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .user-info h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .user-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Меню навігації (Схоже на список чатів) */
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 0 8px;
+            flex-grow: 1;
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Особливий стиль для повідомлень (акцент) */
+        nav a[href="/new_messeges"] {
+            color: #60a5fa;
+        }
+        
+        nav a[href="/new_messeges"]:hover {
+            background-color: rgba(37, 99, 235, 0.15);
+        }
+
+        /* Кнопка виходу в самому низу */
+        nav a:last-child {
+            margin-top: auto;
+            color: var(--logout-color);
+        }
+
+        nav a:last-child:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--logout-hover);
+        }
+
+        /* Головна робоча область (Там де зазвичай відкритий чат) */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .welcome-card {
+            max-width: 450px;
+            padding: 30px;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-card h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .welcome-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Адаптивність для мобільних пристроїв */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .app-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            .main-content {
+                height: 100%;
+                padding: 20px;
+            }
+            nav a:last-child {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <input type = "hidden" name = "csrf_token" value = "{{ csrf_token }}"> 
+
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="avatar">{{ username[0] if username else 'U' }}</div>
+                <div class="user-info">
+                    <h1>{{ username }}</h1>
+                    <p>онлайн</p>
+                </div>
+            </div>
+            
+            <nav>
+                <a href="/search_friends">🔍 Пошук друзів</a>
+                <a href="/my_friends">👥 Мої друзі</a>
+                <a href="/friend_requests">📩 Запити на дружбу</a>
+                <a href="/new_messeges">💬 Нові повідомлення</a>
+                <a href="/logout">🚪 Вихід</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div class="welcome-card">
+                <h2>Раді бачити вас, {{ username }}!</h2>
+                <p>Оберіть потрібний розділ у лівому меню, щоб розпочати спілкування або знайти нових друзів.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
